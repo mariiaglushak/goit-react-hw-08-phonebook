@@ -13,3 +13,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+main{
+  height: 100vh;
+}
+
+.nav-link{
+  text-decoration: none;
+  color:#124444;
+}
+
+.nav-link.active{
+  color:#fff;
+
+
+}

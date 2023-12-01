@@ -8,6 +8,7 @@ export const ContactBtn = styled.button`
   border-color: #4682b4;
   text-transform: capitalize;
   border-radius: 4px;
+  font-weight: bold;
   :hover {
     background-color: #7ea4d6;
   }

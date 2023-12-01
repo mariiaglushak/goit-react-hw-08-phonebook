@@ -7,6 +7,8 @@ import { selectVisibleContacts,selectIsloading ,selectError} from 'redux/contact
 import ContactItem from './ContactItem';
 import Loader from 'components/Loader/Loader';
 
+import { ListContacts } from './ContactListStyle';
+
 
 
 const ContactList = () => {
@@ -34,7 +36,7 @@ const ContactList = () => {
  
  
   return (
-    <ul>
+    <ListContacts>
       {isLoading && !error ? <Loader/> :
       contacts.map(({id,name,phone}) => (
       <ContactItem
@@ -48,7 +50,7 @@ const ContactList = () => {
         />
     
       ))}
-    </ul>
+    </ListContacts>
   );
 };
 

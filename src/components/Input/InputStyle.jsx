@@ -9,4 +9,5 @@ export const InputField = styled.input`
   height: 40px;
   border-color: #4682b4;
   outline-color: #00bfff;
+  border-radius:4px;
 `;

@@ -1,17 +1,31 @@
 import AddContactBtn from "components/Button/AddContactBtn";
+import { useDispatch } from "react-redux";
+import { fetchRegisterThunk } from "redux/auth/auth.reducer";
 
 import { FofmBasic,Input,LabelText,Wrapper } from "components/UtiliteStyle/UtiliteStyle";
 
 
 
 const Register=()=>{
+  const dispatch=useDispatch();
+
+
+
   const hendlSubmitRegisterForm = e =>{
+    e.preventDefault();
+
+    const name=e.currentTarget.elements.userName.value;
     const email=e.currentTarget.elements.userEmail.value;
     const password=e.currentTarget.elements.userPassword.value;
-    const name=e.currentTarget.elements.userName.value;
-    console.log(email,password,name)
    
-    e.preventDefault();
+    console.log(email,password,name)
+    const formData={
+      name,
+      email,
+      password,
+    };
+   
+    dispatch(fetchRegisterThunk(formData))
     
   };
   return <Wrapper>

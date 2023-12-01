@@ -1,4 +1,4 @@
-import { createAsyncThunk,createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk,createSlice,isAnyOf } from "@reduxjs/toolkit";
 import axios from "axios";
 
 
@@ -10,7 +10,7 @@ const setToken = token => {
   instance.defaults.headers.common.Authorization = `Bearer ${token}`;
 };
 
-export const fetchLogin = createAsyncThunk(
+export const fetchLoginThunk = createAsyncThunk(
   'auth/login',
   async (formData, thunkApi) => {
       try {
@@ -25,11 +25,26 @@ export const fetchLogin = createAsyncThunk(
 );
 
 
+export const fetchRegisterThunk = createAsyncThunk(
+  'auth/register',
+  async (formData, thunkApi) => {
+      try {
+          const { data } = await instance.post('/users/signup', formData);
+          console.log("data",data)
+          setToken(data.token);
+          return data;
+      } catch (error) {
+          return thunkApi.rejectWithValue(error.message);
+      }
+  }
+);
 
 
 
 
-const initialState={
+
+
+const initialState = {
   authenticated:false,
   isLoading: false,
   error: null,
@@ -46,6 +61,22 @@ const authSlice = createSlice({
   reducers:{
         
   },
+  extraReducers:builder=>
+  builder.addCase(fetchLoginThunk.fulfilled,(state,{ payload })=>{
+    state.isLoading=false;
+    state.authenticated=true;
+    state.token=payload.token;
+    state.userData=payload.user;
+  })
+  .addMatcher(isAnyOf(fetchLoginThunk.pending, ),(state,action)=>{
+    state.isLoading=true;
+    state.error=null;
+  })
+  .addMatcher(isAnyOf(fetchLoginThunk.rejected, ),(state,{payload})=>{
+    state.isLoading=false;
+    state.error=payload;
+  })
+
   
 });
 

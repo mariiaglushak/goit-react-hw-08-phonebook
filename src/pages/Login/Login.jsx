@@ -1,10 +1,11 @@
 import AddContactBtn from "components/Button/AddContactBtn";
 import { useDispatch } from "react-redux";
-// import { FofmBasicLog,InputLog,LabelText ,WrapperLog} from "./LoginStyle";
-import { fetchLogin } from "redux/auth/auth.reducer";
+
+import { fetchLoginThunk } from "redux/auth/auth.reducer";
 import { FofmBasic,Input,LabelText,Wrapper } from "components/UtiliteStyle/UtiliteStyle";
 
 const Login=()=>{
+  
   const dispatch = useDispatch();
 
   const hendlSubmitLoginForm = e =>{
@@ -16,7 +17,7 @@ const Login=()=>{
       email,
       password
     };
-    dispatch(fetchLogin(formData));
+    dispatch(fetchLoginThunk(formData));
     
     
     
@@ -39,7 +40,7 @@ const Login=()=>{
         type="password" 
         name="userPassword" 
         placeholder="*******"
-        // autoComplete="on"
+        autoComplete="on"
         required
         minLength={8}
         />

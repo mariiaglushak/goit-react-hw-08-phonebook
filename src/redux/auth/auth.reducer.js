@@ -95,6 +95,7 @@ const initialState = {
   error: null,
   token:null,
   userData:null, 
+  isRefresh:false,
 }
 
 const authSlice = createSlice({
@@ -123,17 +124,29 @@ const authSlice = createSlice({
     state.isLoading=false;
     state.authenticated=true;
     state.userData=payload;
+    state.isRefresh=false;
+    
   })
   .addCase(fetchLogOutThunk.fulfilled, ()=>{
     return initialState;
   })
-  .addMatcher(isAnyOf(fetchLoginThunk.pending,fetchRegisterThunk.pending,fetchRefreshThunk.pending,fetchLogOutThunk.pending ),(state,action)=>{
+  .addMatcher(isAnyOf(fetchRefreshThunk.pending),(state,_)=>{
+    state.isRefresh=true;
+    
+  })
+  .addMatcher(isAnyOf(fetchRefreshThunk.rejected),(state,_)=>{
+    state.isRefresh=false;
+    
+  })
+  .addMatcher(isAnyOf(fetchLoginThunk.pending,fetchRegisterThunk.pending,fetchLogOutThunk.pending ),(state,action)=>{
     state.isLoading=true;
     state.error=null;
+    
   })
-  .addMatcher(isAnyOf(fetchLoginThunk.rejected,fetchRegisterThunk.rejected,fetchRefreshThunk.rejected,fetchLogOutThunk.rejected ),(state,{payload})=>{
+  .addMatcher(isAnyOf(fetchLoginThunk.rejected,fetchRegisterThunk.rejected,fetchLogOutThunk.rejected ),(state,{payload})=>{
     state.isLoading=false;
     state.error=payload;
+    
   })
 
   

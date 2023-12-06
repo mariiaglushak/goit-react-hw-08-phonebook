@@ -6,8 +6,10 @@ import Layout from './Layout/Layout';
 import { useDispatch} from "react-redux";
 import RestrictedRoute from './Routes/RestrictedRoute';
 import PrivateRoute from './Routes/PrivateRoute';
+import { useSelector } from 'react-redux';
 
 import { fetchRefreshThunk } from 'redux/auth/auth.reducer';
+import { selectIsRefresh } from 'redux/auth/auth.selectors';
 
 
 
@@ -43,26 +45,27 @@ const appRoutes=[
   }
 ];
 const App = () => {
+  
+  const isRefreshing=useSelector(selectIsRefresh);
+  
 
   const dispatch=useDispatch();
   
   useEffect(()=>{
-    dispatch(fetchRefreshThunk);
-
+  
+    dispatch(fetchRefreshThunk());
   },[dispatch])
 
   return (
-    <>
-    <Layout>
-        <Suspense fallback={<Loader />}>
-          <Routes>
-            {appRoutes.map(({path,element})=>(<Route key={path} path={path} element={element} />))}
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-        </Suspense>
-      </Layout>
-     
-    </>
+  <>
+   {!isRefreshing &&(<Layout>
+      <Suspense fallback={<Loader />}>
+        <Routes>
+          {appRoutes.map(({path,element})=>(<Route key={path} path={path} element={element} />))}
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
+      </Suspense>
+    </Layout>)}</>
    
   );
 };

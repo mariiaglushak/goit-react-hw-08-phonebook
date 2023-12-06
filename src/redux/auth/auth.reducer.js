@@ -49,7 +49,7 @@ export const fetchRefreshThunk = createAsyncThunk(
         const state=thunkApi.getState();
         const token=state.auth.token;
         setToken(token);
-          const { data } = await instance.get('/users/current');
+        const { data } = await instance.get('/users/current');
          
           
           return data;
@@ -124,18 +124,18 @@ const authSlice = createSlice({
     state.isLoading=false;
     state.authenticated=true;
     state.userData=payload;
-    state.isRefresh=true;
+    state.isRefresh=false;
     
   })
   .addCase(fetchLogOutThunk.fulfilled, ()=>{
     return initialState;
   })
   .addMatcher(isAnyOf(fetchRefreshThunk.pending),(state,_)=>{
-    state.isRefresh=false;
+    state.isRefresh=true;
     
   })
   .addMatcher(isAnyOf(fetchRefreshThunk.rejected),(state,_)=>{
-    state.isRefresh=true;
+    state.isRefresh=false;
     
   })
   .addMatcher(isAnyOf(fetchLoginThunk.pending,fetchRegisterThunk.pending,fetchLogOutThunk.pending ),(state,action)=>{

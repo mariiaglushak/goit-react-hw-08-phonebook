@@ -5,7 +5,7 @@ export const ListNav = styled.ul`
   padding:0 30px 0 30px;
   margin:0;
   display:flex;
-  justify-content:space-between;
+ 
   align-items:center;
   list-style: none;
   min-height:50px;
@@ -16,6 +16,8 @@ export const ListNav = styled.ul`
   border-image-source: linear-gradient(to left, #e7c477, #4ce0e0);
   font-size:20px;
   font-weight:bold;
+ 
+  
   
   
 `;
@@ -23,6 +25,8 @@ export const ListNav = styled.ul`
 export const ListNavItemBox=styled.ul`
  padding-left:0;
  display:flex;
+ position:absolute;
+ right:30px;
 
   
 `;
@@ -36,6 +40,8 @@ export const ListNavItem=styled.li`
   :nth-child(2n) {
     margin-right:0;
   }
+
+ 
   background: rgb(34, 191, 230);
   background: linear-gradient(90deg, rgba(154, 236, 236, 0.671) 0%, rgb(245, 165, 100) 100%);
   border-radius:4px;

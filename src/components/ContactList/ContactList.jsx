@@ -38,11 +38,11 @@ const ContactList = () => {
   return (
     <ListContacts>
       {isLoading && !error ? <Loader/> :
-      contacts.map(({id,name,phone}) => (
+      contacts.map(({id,name,number}) => (
       <ContactItem
         key={id}
         name={name}
-        number={phone}
+        number={number}
         onDeleteContact={clickDeletBtn}
         id={id}
         text='Delete'

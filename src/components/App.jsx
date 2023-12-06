@@ -1,7 +1,19 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense,useEffect  } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
+
 import Loader from './Loader/Loader';
 import Layout from './Layout/Layout';
+import { useDispatch} from "react-redux";
+import RestrictedRoute from './Routes/RestrictedRoute';
+import PrivateRoute from './Routes/PrivateRoute';
+
+import { fetchRefreshThunk } from 'redux/auth/auth.reducer';
+
+
+
+import * as ROUTES from "constants/routes.js"
+
+
 
 
 
@@ -11,16 +23,40 @@ const Login = lazy(() => import('pages/Login/Login'));
 const Contacts = lazy(() => import('pages/Contacts/Contacts'));
 
 
+
+const appRoutes=[
+  {
+    path: ROUTES.HOME_ROUTES,
+    element: <Home/>,
+  },
+  {
+    path: ROUTES.REGISTER_ROUTES,
+    element: <RestrictedRoute ><Register/></RestrictedRoute>,
+  },
+  {
+    path: ROUTES.LOGIN_ROUTES,
+    element: <RestrictedRoute ><Login/></RestrictedRoute>,
+  },
+  {
+    path: ROUTES.CONTACTS_ROUTES,
+    element: <PrivateRoute><Contacts/></PrivateRoute>,
+  }
+];
 const App = () => {
+
+  const dispatch=useDispatch();
+  
+  useEffect(()=>{
+    dispatch(fetchRefreshThunk);
+
+  },[dispatch])
+
   return (
     <>
     <Layout>
         <Suspense fallback={<Loader />}>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/contacts" element={<Contacts />}/>
+            {appRoutes.map(({path,element})=>(<Route key={path} path={path} element={element} />))}
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </Suspense>

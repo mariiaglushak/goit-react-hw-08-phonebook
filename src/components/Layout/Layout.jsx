@@ -1,27 +1,28 @@
 import { NavLink } from 'react-router-dom';
-import { ListNav,ListNavItemBox,ListNavItem } from './LayoutStyle';
+import { ListNav,ListNavItem,ListNavItemBox } from './LayoutStyle';
+import { useSelector } from 'react-redux';
+import { selectAauthenticated } from 'redux/auth/auth.selectors';
+import UserMenu from 'components/UserMenu/UserMenu';
+
 
 const Layout=({ children })=>{
-  return<div>
+
+  const authenticated=useSelector(selectAauthenticated);
+ 
+  return(<div>
      <ListNav>
-      <li>
-        <ListNavItemBox>
         <ListNavItem>
           <NavLink className="nav-link" to="/">
             Home
           </NavLink>
         </ListNavItem>
-        <ListNavItem>
+        {authenticated &&(<> <ListNavItem>
           <NavLink className="nav-link" to="/contacts">
             Contacts
           </NavLink>
-        </ListNavItem>
-        </ListNavItemBox>
+        </ListNavItem></>)}
        
-        </li>
-      <li>
-      <ListNavItemBox>
-      <ListNavItem>
+       {authenticated ? (<li><UserMenu/></li>):(<><ListNavItemBox><ListNavItem>
           <NavLink className="nav-link" to="/register">
             Register
           </NavLink>
@@ -30,19 +31,12 @@ const Layout=({ children })=>{
           <NavLink className="nav-link" to="/login">
             Login
           </NavLink>
-        </ListNavItem>
-       
-        </ListNavItemBox>
-        </li>
-      
-      
-      
-        
+        </ListNavItem></ListNavItemBox></>)} 
         
       </ListNav>
       <main>{children}</main>
 
   </div>
-}
+)}
 
 export default Layout;

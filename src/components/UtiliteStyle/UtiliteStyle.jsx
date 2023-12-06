@@ -29,10 +29,10 @@ export const FofmBasic = styled.form`
     inset 0 -3em 3em rgba(0, 0, 0, 0.1),
     0 0 0 2px rgb(255, 255, 255),
     0.3em 0.3em 1em rgba(0, 0, 0, 0.3);
+
 `;
 
 export const Input = styled.input`
-
   padding-left: 10px;
   font-size: 20px;
   display: block;
@@ -41,6 +41,7 @@ export const Input = styled.input`
   border-color: #4682b4;
   outline-color: #00bfff;
   border-radius:4px;
+
 `;
 
 export const LabelText=styled.span`
@@ -48,4 +49,8 @@ export const LabelText=styled.span`
   width: 100%;
   margin-bottom: 6px;
   
+`;
+
+export const ButtonWrap=styled.div`
+  padding-top:20px;
 `;

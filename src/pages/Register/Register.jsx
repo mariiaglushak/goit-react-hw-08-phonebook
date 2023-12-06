@@ -2,7 +2,7 @@ import AddContactBtn from "components/Button/AddContactBtn";
 import { useDispatch } from "react-redux";
 import { fetchRegisterThunk } from "redux/auth/auth.reducer";
 
-import { FofmBasic,Input,LabelText,Wrapper } from "components/UtiliteStyle/UtiliteStyle";
+import { FofmBasic,Input,LabelText,Wrapper,ButtonWrap } from "components/UtiliteStyle/UtiliteStyle";
 
 
 
@@ -17,8 +17,7 @@ const Register=()=>{
     const name=e.currentTarget.elements.userName.value;
     const email=e.currentTarget.elements.userEmail.value;
     const password=e.currentTarget.elements.userPassword.value;
-   
-    console.log(email,password,name)
+ 
     const formData={
       name,
       email,
@@ -59,7 +58,8 @@ const Register=()=>{
         minLength={8}
         />
        </label>
-       <AddContactBtn text='Sign up'/>               
+       <ButtonWrap><AddContactBtn text='Sign up'/></ButtonWrap>
+                      
     </FofmBasic>
   
   </Wrapper>

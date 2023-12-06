@@ -1,51 +1,52 @@
 import { createAsyncThunk,createSlice,isAnyOf } from "@reduxjs/toolkit";
-import axios from "axios";
+import { instance } from "redux/auth/auth.reducer";
 
 
-export const fetchContacts=createAsyncThunk(
+
+
+
+export const fetchContacts = createAsyncThunk(
   'contacts/fetchAll',
   async (_, thunkApi) => {
       try {
-          const { data } = await axios.get(
-              `https://6565f3eceb8bb4b70ef2aa6c.mockapi.io/contacts`
-          );
+          const { data } = await instance.get('/contacts');
+       
+          
           return data;
       } catch (error) {
           return thunkApi.rejectWithValue(error.message);
       }
   }
+);
 
-)
-
-export const addContact=createAsyncThunk(
+export const addContact = createAsyncThunk(
   'contacts/addContact',
-  async (contact, thunkApi) => {
+  async (formData, thunkApi) => {
       try {
-          const { data } = await axios.post(
-              `https://6565f3eceb8bb4b70ef2aa6c.mockapi.io/contacts`,contact
-          );
+          const { data } = await instance.post('/contacts',formData);
+      
+          
           return data;
       } catch (error) {
           return thunkApi.rejectWithValue(error.message);
       }
   }
+);
 
-)
-
-export const deleteContact=createAsyncThunk(
+export const deleteContact = createAsyncThunk(
   'contacts/deleteContact',
-  async (id, thunkApi) => {
+  async (contactId, thunkApi) => {
       try {
-          const { data } = await axios.delete(
-              `https://6565f3eceb8bb4b70ef2aa6c.mockapi.io/contacts/${id}`
-         );
+          const { data } = await instance.delete(`/contacts/${contactId}`);
+        
           return data;
       } catch (error) {
           return thunkApi.rejectWithValue(error.message);
       }
   }
+);
 
-)
+
 
 
 const initialState={
@@ -77,7 +78,7 @@ const contactsSlice = createSlice({
   })
   .addCase(addContact.fulfilled, (state, { payload }) => {
     state.contacts.isLoading = false;
-    state.contacts.items.push(payload);
+    state.contacts.items= [...state.contacts.items,payload];
   })
   .addCase(deleteContact.fulfilled, (state, { payload }) => {
     state.contacts.isLoading = false;

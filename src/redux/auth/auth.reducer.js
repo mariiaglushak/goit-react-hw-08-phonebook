@@ -15,7 +15,7 @@ export const fetchLoginThunk = createAsyncThunk(
   async (formData, thunkApi) => {
       try {
           const { data } = await instance.post('/users/login', formData);
-          console.log("data",data)
+          
           setToken(data.token);
           return data;
       } catch (error) {
@@ -30,8 +30,53 @@ export const fetchRegisterThunk = createAsyncThunk(
   async (formData, thunkApi) => {
       try {
           const { data } = await instance.post('/users/signup', formData);
-          console.log("data",data)
+          
           setToken(data.token);
+          return data;
+      } catch (error) {
+          return thunkApi.rejectWithValue(error.message);
+      }
+  }
+);
+
+
+
+
+export const fetchRefreshThunk = createAsyncThunk(
+  'auth/refresh',
+  async (_, thunkApi) => {
+      try {
+        const state=thunkApi.getState();
+        const token=state.auth.token;
+        setToken(token);
+          const { data } = await instance.get('/users/current');
+         
+          
+          return data;
+      } catch (error) {
+          return thunkApi.rejectWithValue(error.message);
+      }
+  },
+  {
+    condition:(_, thunkApi) =>{
+      const state=thunkApi.getState();
+      const token=state.auth.token;
+      if(!token) return false;
+      return true;
+
+    },
+
+  }
+);
+
+
+
+export const fetchLogOutThunk = createAsyncThunk(
+  'auth/logout',
+  async (_, thunkApi) => {
+      try {
+          const { data } = await instance.post('/users/logout'); 
+          
           return data;
       } catch (error) {
           return thunkApi.rejectWithValue(error.message);
@@ -68,11 +113,25 @@ const authSlice = createSlice({
     state.token=payload.token;
     state.userData=payload.user;
   })
-  .addMatcher(isAnyOf(fetchLoginThunk.pending, ),(state,action)=>{
+  .addCase(fetchRegisterThunk.fulfilled,(state,{ payload })=>{
+    state.isLoading=false;
+    state.authenticated=true;
+    state.token=payload.token;
+    state.userData=payload.user;
+  })
+  .addCase(fetchRefreshThunk.fulfilled,(state,{ payload })=>{
+    state.isLoading=false;
+    state.authenticated=true;
+    state.userData=payload;
+  })
+  .addCase(fetchLogOutThunk.fulfilled, ()=>{
+    return initialState;
+  })
+  .addMatcher(isAnyOf(fetchLoginThunk.pending,fetchRegisterThunk.pending,fetchRefreshThunk.pending,fetchLogOutThunk.pending ),(state,action)=>{
     state.isLoading=true;
     state.error=null;
   })
-  .addMatcher(isAnyOf(fetchLoginThunk.rejected, ),(state,{payload})=>{
+  .addMatcher(isAnyOf(fetchLoginThunk.rejected,fetchRegisterThunk.rejected,fetchRefreshThunk.rejected,fetchLogOutThunk.rejected ),(state,{payload})=>{
     state.isLoading=false;
     state.error=payload;
   })

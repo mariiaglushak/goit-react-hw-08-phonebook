@@ -18,7 +18,7 @@ export const MainTitleCont=styled.h1`
 `;
 
 export const SectionFormCont=styled.section`
- padding:15px 0 0 40px;
+ padding:60px 0 0 40px;
 `;
 
 export const ContactsBookTitle=styled.h2`

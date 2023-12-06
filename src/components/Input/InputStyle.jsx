@@ -10,4 +10,7 @@ export const InputField = styled.input`
   border-color: #4682b4;
   outline-color: #00bfff;
   border-radius:4px;
+
+ 
+  
 `;

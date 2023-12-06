@@ -6,11 +6,12 @@ import AddContactBtn from 'components/Button/AddContactBtn';
 import { addContact } from 'redux/contacts/contacts.reducer';
 import { selectContacts } from 'redux/contacts/contacts.selectors';
 import { FofmBasic } from './ContactFormStyle';
+import { ButtonWrap } from 'components/UtiliteStyle/UtiliteStyle';
 
 
 const ContactForm = () => {
   const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [number, setNumber] = useState('');
   const dispatch = useDispatch();
   const contacts = useSelector(selectContacts);
  
@@ -25,7 +26,7 @@ const ContactForm = () => {
         return;
       }
       case 'number': {
-        setPhone(inputNameValue);
+        setNumber(inputNameValue);
         return;
       }
       default:
@@ -34,10 +35,10 @@ const ContactForm = () => {
   };
 
 
-  const handlerFormSubmit = ({ name, phone }) => {
-    const contact = {
+  const handlerFormSubmit = ({ name, number }) => {
+    const formData = {
       name: name,
-      phone: phone,
+      number: number,
     };
 
     const normalizeName = name.toLowerCase();
@@ -49,20 +50,20 @@ const ContactForm = () => {
       return;
     }
 
-    dispatch(addContact(contact))
+    dispatch(addContact(formData))
   };
 
 
   const handlerSubmitForm = e => {
     e.preventDefault();
-    handlerFormSubmit({ name, phone });
+    handlerFormSubmit({ name, number });
     resetState();
   };
 
   
   const resetState = () => {
     setName('');
-    setPhone('');
+    setNumber('');
   };
 
   return (
@@ -75,13 +76,14 @@ const ContactForm = () => {
         required="required"
       ></Input>
       <Input
-        value={phone}
+        value={number}
         onChange={handleFormInput}
         type="tel"
         name="number"
         required="required"
       ></Input>
-      <AddContactBtn text="add contact" />
+      <ButtonWrap><AddContactBtn text="add contact" /></ButtonWrap>
+      
     </FofmBasic>
   );
 };

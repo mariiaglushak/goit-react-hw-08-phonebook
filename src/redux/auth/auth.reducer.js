@@ -131,7 +131,7 @@ const authSlice = createSlice({
     return initialState;
   })
   .addMatcher(isAnyOf(fetchRefreshThunk.pending),(state,_)=>{
-    state.isRefresh=true;
+    state.isRefresh=false;
     
   })
   .addMatcher(isAnyOf(fetchRefreshThunk.rejected),(state,_)=>{

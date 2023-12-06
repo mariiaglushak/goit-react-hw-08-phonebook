@@ -47,7 +47,7 @@ export const fetchRefreshThunk = createAsyncThunk(
   async (_, thunkApi) => {
       try {
         const state=thunkApi.getState();
-        const token=state.auth.token;
+        const token=state.authStore.token;
         setToken(token);
         const { data } = await instance.get('/users/current');
          
@@ -60,7 +60,7 @@ export const fetchRefreshThunk = createAsyncThunk(
   {
     condition:(_, thunkApi) =>{
       const state=thunkApi.getState();
-      const token=state.auth.token;
+      const token=state.authStore.token;
       if(!token) return false;
       return true;
 
@@ -95,7 +95,7 @@ const initialState = {
   error: null,
   token:null,
   userData:null, 
-  isRefresh:true,
+  
 }
 
 const authSlice = createSlice({
@@ -124,26 +124,16 @@ const authSlice = createSlice({
     state.isLoading=false;
     state.authenticated=true;
     state.userData=payload;
-    state.isRefresh=false;
-    
   })
   .addCase(fetchLogOutThunk.fulfilled, ()=>{
     return initialState;
   })
-  .addMatcher(isAnyOf(fetchRefreshThunk.pending),(state,_)=>{
-    state.isRefresh=false;
-    
-  })
-  .addMatcher(isAnyOf(fetchRefreshThunk.rejected),(state,_)=>{
-    state.isRefresh=false;
-    
-  })
-  .addMatcher(isAnyOf(fetchLoginThunk.pending,fetchRegisterThunk.pending,fetchLogOutThunk.pending ),(state,action)=>{
+  .addMatcher(isAnyOf(fetchLoginThunk.pending,fetchRegisterThunk.pending,fetchLogOutThunk.pending,fetchRefreshThunk.pending ),(state,action)=>{
     state.isLoading=true;
     state.error=null;
     
   })
-  .addMatcher(isAnyOf(fetchLoginThunk.rejected,fetchRegisterThunk.rejected,fetchLogOutThunk.rejected ),(state,{payload})=>{
+  .addMatcher(isAnyOf(fetchLoginThunk.rejected,fetchRegisterThunk.rejected,fetchLogOutThunk.rejected,fetchRefreshThunk.rejected ),(state,{payload})=>{
     state.isLoading=false;
     state.error=payload;
     
